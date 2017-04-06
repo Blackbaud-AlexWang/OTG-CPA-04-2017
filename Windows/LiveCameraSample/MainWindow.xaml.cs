@@ -33,6 +33,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Web;
+using System.Windows.Forms;
+using ConstituentAPIHandler.API;
 using Newtonsoft.Json;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -59,6 +63,7 @@ using VideoFrameAnalyzer;
 using CSHttpClientSample;
 using Database;
 using ConstituentAPIHandler.Contracts;
+using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace LiveCameraSample
 {
@@ -331,6 +336,78 @@ namespace LiveCameraSample
                     _grabber.AnalysisFunction = null;
                     break;
             }
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            var applicationId = "9bc8f539-a340-41e7-9020-d781e2024fc7";
+            var url =
+                $"https://oauth2.sky.blackbaud.com/authorization?client_id={applicationId}&response_type=token&redirect_uri=https://www.example.com/oauth2/callback&state=fdf80155";
+            Process.Start("IExplore.exe", url);
+            oauthBrowser_Navigated();
+        }
+
+        public struct URLDetails
+        {
+            /// <summary>
+            /// URL (location)
+            /// </summary>
+            public string URL;
+
+            /// <summary>
+            /// Document title
+            /// </summary>
+            public string Title;
+        }
+
+       
+
+        // requires the following DLL added as a reference:
+        // C:\Windows\System32\shdocvw.dll
+
+        /// <summary>
+        /// Retrieve the current open URLs in Internet Explorer
+        /// </summary>
+        /// <returns></returns>
+        public static URLDetails[] InternetExplorer()
+        {
+            System.Collections.Generic.List<URLDetails> URLs = new System.Collections.Generic.List<URLDetails>();
+            var shellWindows = new SHDocVw.ShellWindows();
+            foreach (SHDocVw.InternetExplorer ie in shellWindows)
+                URLs.Add(new URLDetails() { URL = ie.LocationURL, Title = ie.LocationName });
+            return URLs.ToArray();
+        }
+
+
+        private void oauthBrowser_Navigated( )
+        {
+            var urls = InternetExplorer();
+            var properSite = true;
+            if (urls.Any(u => u.URL.Contains("callback#")))
+            {
+                var code = GetToken(urls.First(u => u.URL.Contains("callback#")).URL);
+                Headers.AccessKey = code;
+                properSite = false;
+            }
+            else if (properSite)
+            {
+                oauthBrowser_Navigated();
+                //urls = InternetExplorer();
+            }
+        }
+
+        private string GetToken(string url)
+        {
+            var start = url.IndexOf("=");
+            var length = url.IndexOf("&") - start;
+            return url.Substring(start + 1, length - 1);
+        }
+
+        private void GetRowe_Click(object sender, RoutedEventArgs e)
+        {
+            _constituentHandler = new ConstituentHandler(new HttpClient());
+            var rowe = _constituentHandler.GetConstituent(914);
+            var history = _constituentHandler.GetGivingHistory(914);
         }
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)

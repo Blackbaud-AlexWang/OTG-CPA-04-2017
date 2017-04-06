@@ -161,6 +161,10 @@
       <Project>{8DA84E73-D1EC-453B-B3D7-C43FA055E09B}</Project>
       <Name>ConstituentAPIHandler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VideoFrameAnalyzer\VideoFrameAnalyzer.csproj">
       <Project>{bec7da78-c953-4a72-924f-2749d1f9f18b}</Project>
       <Name>VideoFrameAnalyzer</Name>

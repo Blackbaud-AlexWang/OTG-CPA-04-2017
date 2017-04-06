@@ -89,6 +89,8 @@ namespace LiveCameraSample
         {
             InitializeComponent();
 
+            this.DataContext = new ConstituentData();
+
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
 
@@ -416,6 +418,11 @@ namespace LiveCameraSample
         {
             SettingsPanel.Visibility = Visibility.Hidden;
             Properties.Settings.Default.Save();
+        }
+
+        private void ConstituentInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConstituentInfoPanel.Visibility = 1 - ConstituentInfoPanel.Visibility;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

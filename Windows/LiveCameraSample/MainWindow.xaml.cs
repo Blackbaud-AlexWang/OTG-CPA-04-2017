@@ -46,6 +46,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Net.Http;
 using Newtonsoft.Json;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -55,6 +56,9 @@ using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 using Microsoft.ProjectOxford.Vision;
 using VideoFrameAnalyzer;
+using CSHttpClientSample;
+using Database;
+using ConstituentAPIHandler.Contracts;
 
 namespace LiveCameraSample
 {
@@ -75,6 +79,8 @@ namespace LiveCameraSample
         private LiveCameraResult _latestResultsToDisplay = null;
         private AppMode _mode;
         private DateTime _startTime;
+        private ConstituentHandler _constituentHandler;
+        private SqlHandler _sqlHandler;
 
         public enum AppMode
         {
@@ -125,6 +131,7 @@ namespace LiveCameraSample
                 {
                     _grabber.StopProcessingAsync();
                 }
+
             };
 
             // Set up a listener for when the client receives a new result from an API call. 
@@ -391,6 +398,10 @@ namespace LiveCameraSample
             _faceClient = new FaceServiceClient(Properties.Settings.Default.FaceAPIKey);
             _emotionClient = new EmotionServiceClient(Properties.Settings.Default.EmotionAPIKey);
             _visionClient = new VisionServiceClient(Properties.Settings.Default.VisionAPIKey);
+            _constituentHandler = new ConstituentHandler(new HttpClient());
+
+            // Create sql client
+            _sqlHandler = new SqlHandler("Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI");
 
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
@@ -471,6 +482,19 @@ namespace LiveCameraSample
                     Height = rect.Height
                 }
             };
+        }
+
+        private async Task<Constituent> GetConstituent(Guid faceId)
+        {
+            var sql = "select top 1 ConstituentId from dbo.Constituents where FaceId = @faceId";
+
+            var constituentId = 0;
+            _sqlHandler.Query(
+                sql, 
+                new Dictionary<string, dynamic> { { "faceId", faceId.ToString() } },
+                (reader) => constituentId = reader.GetInt32(0));
+
+            return await _constituentHandler.GetConstituent(constituentId);
         }
 
         private void MatchAndReplaceFaceRectangles(Face[] faces, OpenCvSharp.Rect[] clientRects)

@@ -57,6 +57,8 @@ using Microsoft.ProjectOxford.Face.Contract;
 using Microsoft.ProjectOxford.Vision;
 using VideoFrameAnalyzer;
 using CSHttpClientSample;
+using Database;
+using ConstituentAPIHandler.Contracts;
 
 namespace LiveCameraSample
 {
@@ -77,7 +79,8 @@ namespace LiveCameraSample
         private LiveCameraResult _latestResultsToDisplay = null;
         private AppMode _mode;
         private DateTime _startTime;
-        private ConstituentHandler _constituentHander;
+        private ConstituentHandler _constituentHandler;
+        private SqlHandler _sqlHandler;
 
         public enum AppMode
         {
@@ -91,6 +94,8 @@ namespace LiveCameraSample
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = new ConstituentData();
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
@@ -393,7 +398,11 @@ namespace LiveCameraSample
             _faceClient = new FaceServiceClient(Properties.Settings.Default.FaceAPIKey);
             _emotionClient = new EmotionServiceClient(Properties.Settings.Default.EmotionAPIKey);
             _visionClient = new VisionServiceClient(Properties.Settings.Default.VisionAPIKey);
-            _constituentHander = new ConstituentHandler(new HttpClient());
+            _constituentHandler = new ConstituentHandler(new HttpClient());
+
+            // Create sql client
+            _sqlHandler = new SqlHandler("Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI");
+
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
 
@@ -420,6 +429,11 @@ namespace LiveCameraSample
         {
             SettingsPanel.Visibility = Visibility.Hidden;
             Properties.Settings.Default.Save();
+        }
+
+        private void ConstituentInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConstituentInfoPanel.Visibility = 1 - ConstituentInfoPanel.Visibility;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -468,6 +482,19 @@ namespace LiveCameraSample
                     Height = rect.Height
                 }
             };
+        }
+
+        private async Task<Constituent> GetConstituent(Guid faceId)
+        {
+            var sql = "select top 1 ConstituentId from dbo.Constituents where FaceId = @faceId";
+
+            var constituentId = 0;
+            _sqlHandler.Query(
+                sql, 
+                new Dictionary<string, dynamic> { { "faceId", faceId.ToString() } },
+                (reader) => constituentId = reader.GetInt32(0));
+
+            return await _constituentHandler.GetConstituent(constituentId);
         }
 
         private void MatchAndReplaceFaceRectangles(Face[] faces, OpenCvSharp.Rect[] clientRects)

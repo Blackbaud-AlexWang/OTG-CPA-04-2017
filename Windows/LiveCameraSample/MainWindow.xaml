@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LiveCameraSample"
         mc:Ignorable="d"
-        Title="LiveCameraSample" Height="550" Width="725">
+        Title="LiveCameraSample" Height="725" Width="956">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -19,11 +19,16 @@
             <TextBlock VerticalAlignment="Center" Margin="15,5,0,5" Text="Mode:" />
             <ComboBox x:Name="ModeList" Width="100" Margin="5,5,0,5" Loaded="ModeList_Loaded" SelectionChanged="ModeList_SelectionChanged" />
         </StackPanel>
-        <Button Content="Show/Hide Settings" Padding="5,0" Margin="5" Click="SettingsButton_Click" HorizontalAlignment="Right" />
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ShowHideBar" HorizontalAlignment="Right">
+            <Button Content="Show/Hide Settings" Padding="5,0" Margin="5" Click="SettingsButton_Click" />
+            <Button Content="Show/Hide Constituent Information" Padding="5,0" Margin="5" Click="ConstituentInfoButton_Click" />
+        </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="158*" />
+                <ColumnDefinition Width="158*" />
+                <ColumnDefinition Width="107*" />
+                <ColumnDefinition Width="51*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="LeftImage" Grid.Column="0" Margin="5" />
             <Image x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="1" />
@@ -60,6 +65,29 @@
                 </TextBlock>
                 <CheckBox Margin="5" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.AutoStopEnabled}" ContentStringFormat="Automatically stop after {0}" Content="{Binding Source={StaticResource Settings}, Path=Default.AutoStopTime}" />
                 <Button Margin="5" Content="Save" Click="SaveSettingsButton_Click" />
+            </StackPanel>
+            <StackPanel Visibility="{Binding Path=Visibility, Mode=TwoWay}" Grid.Column="2" Panel.ZIndex="2" Name="ConstituentInfoPanel" Background="LightGray" VerticalAlignment="Top" Margin="5,5,0,0" Grid.ColumnSpan="2">
+                <TextBlock Margin="5" Grid.Row="0" FontWeight="Bold" Text="Constituent Information"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="Name:" />
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name}" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Age:" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Age}" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Phone Number:" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=Phone}" />
+                </Grid>
             </StackPanel>
         </Grid>
         <TextBlock Name="MessageArea" Margin="5" Grid.Row="2" VerticalAlignment="Center" />

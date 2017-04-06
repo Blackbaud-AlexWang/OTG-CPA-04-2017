@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveCameraSample", "LiveCameraSample\LiveCameraSample.csproj", "{5B40977E-E8FA-41BC-8F0A-6D6FDE237571}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicConsoleSample", "BasicConsoleSample\BasicConsoleSample.csproj", "{0638DEF8-9613-4599-9335-7A2438B447DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstituentAPIHandler", "ConstituentAPIHandler\ConstituentAPIHandler.csproj", "{8DA84E73-D1EC-453B-B3D7-C43FA055E09B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8DA84E73-D1EC-453B-B3D7-C43FA055E09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DA84E73-D1EC-453B-B3D7-C43FA055E09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DA84E73-D1EC-453B-B3D7-C43FA055E09B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

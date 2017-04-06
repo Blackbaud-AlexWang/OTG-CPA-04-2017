@@ -31,6 +31,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // 
 
+using ConstituentAPIHandler.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,5 +47,6 @@ namespace LiveCameraSample
         public Microsoft.ProjectOxford.Emotion.Contract.Scores[] EmotionScores { get; set; } = null;
         public string[] CelebrityNames { get; set; } = null;
         public Microsoft.ProjectOxford.Vision.Contract.Tag[] Tags { get; set; } = null;
+        public Dictionary<Guid, Constituent> Constituents { get; set; }
     }
 }

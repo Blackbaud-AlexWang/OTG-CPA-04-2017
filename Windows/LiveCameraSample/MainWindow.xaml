@@ -23,12 +23,11 @@
             <Button Content="Show/Hide Settings" Padding="5,0" Margin="5" Click="SettingsButton_Click" />
             <Button Content="Show/Hide Constituent Information" Padding="5,0" Margin="5" Click="ConstituentInfoButton_Click" />
         </StackPanel>
-        <Grid Grid.Row="1">
+        <Grid Margin="0,25,0,10" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="158*" />
-                <ColumnDefinition Width="158*" />
-                <ColumnDefinition Width="107*" />
-                <ColumnDefinition Width="51*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Image x:Name="LeftImage" Grid.Column="0" Margin="5" />
             <Image x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="1" />
@@ -81,12 +80,16 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="Name:" />
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="First Name:" />
                     <TextBlock Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name}" />
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Age:" />
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Age}" />
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Phone Number:" />
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=Phone}" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Last Name:" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=LastName}" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Age:" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=Age}" />
+                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="0" Text="Phone Number:" />
+                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="1" Text="{Binding Path=Phone}" />
+                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="0" Text="Email:" />
+                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="1" Text="{Binding Path=EmailAddress}" />
                 </Grid>
             </StackPanel>
         </Grid>

@@ -95,7 +95,7 @@ namespace LiveCameraSample
         {
             InitializeComponent();
 
-            this.DataContext = new ConstituentData();
+            this.DataContext = new Constituent();
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();

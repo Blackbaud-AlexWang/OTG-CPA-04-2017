@@ -10,15 +10,13 @@ namespace CSHttpClientSample
     public class ConstituentHandler
     {
         private static HttpClient _client;
-        private static Headers headers;
         private static ContractMappers _mapper;
 
         public ConstituentHandler(HttpClient client)
         {
             _client = client;
-            _client.DefaultRequestHeaders.Add("bb-api-subscription-key", headers.SubscriptionKey);
-            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {headers.AccessKey}");
-            headers = new Headers();
+            _client.DefaultRequestHeaders.Add("bb-api-subscription-key", Headers.SubscriptionKey);
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Headers.AccessKey}");
             _mapper = new ContractMappers();
         }
 

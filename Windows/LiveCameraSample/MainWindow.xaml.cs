@@ -82,6 +82,7 @@ namespace LiveCameraSample
         private ConstituentHandler _constituentHandler;
         private SqlHandler _sqlHandler;
 
+        private bool _refreshLeft = true;
         public enum AppMode
         {
             Faces,
@@ -116,7 +117,8 @@ namespace LiveCameraSample
                 this.Dispatcher.BeginInvoke((Action)(() =>
                 {
                     // Display the image in the left pane.
-                    LeftImage.Source = e.Frame.Image.ToBitmapSource();
+                    // LeftImage.Source = e.Frame.Image.ToBitmapSource();
+                    LeftImage.Source = LeftImageVisualResults(e.Frame);
 
                     // If we're fusing client-side face detection with remote analysis, show the
                     // new frame now with the most recent analysis available. 
@@ -312,7 +314,41 @@ namespace LiveCameraSample
                 }
 
                 visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames);
+                visImage = Visualization.DrawTags(visImage, result.Tags);        
+            }
+
+            return visImage;
+        }
+
+        private BitmapSource LeftImageVisualResults(VideoFrame frame)
+        {
+            // Draw any results on top of the image. 
+            BitmapSource visImage = frame.Image.ToBitmapSource();
+
+            var result = _latestResultsToDisplay;
+
+            if (result != null)
+            {
+                // See if we have local face detections for this image.
+                var clientFaces = (OpenCvSharp.Rect[])frame.UserData;
+                if (clientFaces != null && result.Faces != null)
+                {
+                    // If so, then the analysis results might be from an older frame. We need to match
+                    // the client-side face detections (computed on this frame) with the analysis
+                    // results (computed on the older frame) that we want to display. 
+                    MatchAndReplaceFaceRectangles(result.Faces, clientFaces);
+                }
+
+                visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames);
                 visImage = Visualization.DrawTags(visImage, result.Tags);
+
+                if (_refreshLeft)
+                {
+                    LeftImage.Source = Visualization.DrawFaces((BitmapSource)LeftImage.Source, result.Faces, result.EmotionScores, result.CelebrityNames);
+                    LeftImage.Source = Visualization.DrawTags((BitmapSource)LeftImage.Source, result.Tags);
+                    _refreshLeft = false;
+                }
+
             }
 
             return visImage;

@@ -409,7 +409,7 @@ namespace LiveCameraSample
             // Reset message. 
             MessageArea.Text = "";
 
-            // Record start time, for auto-stop
+             // Record start time, for auto-stop
             _startTime = DateTime.Now;
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
@@ -494,7 +494,7 @@ namespace LiveCameraSample
                 new Dictionary<string, dynamic> { { "faceId", faceId.ToString() } },
                 (reader) => constituentId = reader.GetInt32(0));
 
-            return await _constituentHandler.GetConstituent(constituentId);
+            return _constituentHandler.GetConstituent(constituentId);
         }
 
         private void MatchAndReplaceFaceRectangles(Face[] faces, OpenCvSharp.Rect[] clientRects)

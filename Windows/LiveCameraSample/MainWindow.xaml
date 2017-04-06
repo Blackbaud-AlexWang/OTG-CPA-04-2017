@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LiveCameraSample"
         mc:Ignorable="d"
-        Title="LiveCameraSample" Height="725" Width="956">
+        Title="Constituent Facial Recognition" Height="725" Width="956">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -25,15 +25,14 @@
             <Button Content="Show/Hide Settings" Padding="5,0" Margin="5" Click="SettingsButton_Click" />
             <Button Content="Show/Hide Constituent Information" Padding="5,0" Margin="5" Click="ConstituentInfoButton_Click" />
         </StackPanel>
-        <Grid Grid.Row="1">
+        <Grid Margin="0,25,0,10" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="158*" />
-                <ColumnDefinition Width="158*" />
-                <ColumnDefinition Width="107*" />
-                <ColumnDefinition Width="51*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Image x:Name="LeftImage" Grid.Column="0" Margin="5" />
-            <Image x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="1" />
+            <Image x:Name="LeftImage" Grid.Column="1" Margin="5" />
+            <Image Visibility="Hidden" x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="5" />
             <StackPanel Visibility="{Binding Source={StaticResource Settings}, Path=Default.SettingsPanelVisibility, Mode=TwoWay}" Grid.Column="1" Panel.ZIndex="2" Name="SettingsPanel" Background="LightGray" VerticalAlignment="Top" Margin="5">
                 <TextBlock Margin="5" Grid.Row="0" FontWeight="Bold" Text="Settings"/>
                 <Grid>
@@ -68,7 +67,7 @@
                 <CheckBox Margin="5" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.AutoStopEnabled}" ContentStringFormat="Automatically stop after {0}" Content="{Binding Source={StaticResource Settings}, Path=Default.AutoStopTime}" />
                 <Button Margin="5" Content="Save" Click="SaveSettingsButton_Click" />
             </StackPanel>
-            <StackPanel Visibility="{Binding Path=Visibility, Mode=TwoWay}" Grid.Column="2" Panel.ZIndex="2" Name="ConstituentInfoPanel" Background="LightGray" VerticalAlignment="Top" Margin="5,5,0,0" Grid.ColumnSpan="2">
+            <StackPanel Visibility="{Binding Path=Visibility, Mode=TwoWay}" Grid.Column="2" Panel.ZIndex="2" Name="ConstituentInfoPanel" Background="LightGreen" VerticalAlignment="Top" Margin="5,5,0,0" Grid.ColumnSpan="2">
                 <TextBlock Margin="5" Grid.Row="0" FontWeight="Bold" Text="Constituent Information"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -83,12 +82,16 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="Name:" />
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="First Name:" />
                     <TextBlock Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name}" />
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Age:" />
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Age}" />
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Phone Number:" />
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=Phone}" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Last Name:" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=LastName}" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Age:" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=Age}" />
+                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="0" Text="Phone Number:" />
+                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="1" Text="{Binding Path=Phone}" />
+                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="0" Text="Email:" />
+                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="1" Text="{Binding Path=EmailAddress}" />
                 </Grid>
             </StackPanel>
         </Grid>

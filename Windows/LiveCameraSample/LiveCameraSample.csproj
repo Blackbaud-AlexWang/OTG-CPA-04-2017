@@ -157,6 +157,10 @@
     <Resource Include="test.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConstituentAPIHandler\ConstituentAPIHandler.csproj">
+      <Project>{8DA84E73-D1EC-453B-B3D7-C43FA055E09B}</Project>
+      <Name>ConstituentAPIHandler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VideoFrameAnalyzer\VideoFrameAnalyzer.csproj">
       <Project>{bec7da78-c953-4a72-924f-2749d1f9f18b}</Project>
       <Name>VideoFrameAnalyzer</Name>

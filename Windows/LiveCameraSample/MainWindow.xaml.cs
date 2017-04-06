@@ -46,6 +46,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Net.Http;
 using Newtonsoft.Json;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -55,6 +56,7 @@ using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 using Microsoft.ProjectOxford.Vision;
 using VideoFrameAnalyzer;
+using CSHttpClientSample;
 
 namespace LiveCameraSample
 {
@@ -75,6 +77,7 @@ namespace LiveCameraSample
         private LiveCameraResult _latestResultsToDisplay = null;
         private AppMode _mode;
         private DateTime _startTime;
+        private ConstituentHandler _constituentHander;
 
         public enum AppMode
         {
@@ -123,6 +126,7 @@ namespace LiveCameraSample
                 {
                     _grabber.StopProcessingAsync();
                 }
+
             };
 
             // Set up a listener for when the client receives a new result from an API call. 
@@ -389,7 +393,7 @@ namespace LiveCameraSample
             _faceClient = new FaceServiceClient(Properties.Settings.Default.FaceAPIKey);
             _emotionClient = new EmotionServiceClient(Properties.Settings.Default.EmotionAPIKey);
             _visionClient = new VisionServiceClient(Properties.Settings.Default.VisionAPIKey);
-
+            _constituentHander = new ConstituentHandler(new HttpClient());
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
 

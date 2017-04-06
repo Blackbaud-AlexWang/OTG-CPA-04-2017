@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace Database
 {
@@ -13,7 +14,7 @@ namespace Database
             _connectionString = connectionString;
         }
 
-        public IEnumerable<T> Query<T>(string sql, Dictionary<string, dynamic> parameters, Func<SqlDataReader, T> Mapper)
+        public async Task<IEnumerable<T>> QueryAsync<T>(string sql, Dictionary<string, dynamic> parameters, Func<SqlDataReader, T> Mapper)
         {
             var ret = new List<T>();
 
@@ -30,7 +31,7 @@ namespace Database
                 }
 
                 connection.Open();
-                var reader = command.ExecuteReader();
+                var reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
                     ret.Add(Mapper(reader));

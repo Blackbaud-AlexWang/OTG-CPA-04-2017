@@ -212,9 +212,9 @@ namespace LiveCameraSample
                 // Get top 1 among all candidates returned
                 var candidateId = identifyResult.Candidates[0].PersonId;
                 var person = await _faceClient.GetPersonAsync("myfriends", candidateId);
-                Console.WriteLine("Identified as {0}", person.Name);
+                Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
 
-                var constituentId = await GetConstituentId(identifyResult.FaceId);
+                var constituentId = await GetConstituentId(candidateId);
                 Console.WriteLine("ConstituentId: {0}", constituentId);
                 if (constituentId > 0)
                 {
@@ -392,13 +392,13 @@ namespace LiveCameraSample
             e.Handled = true;
         }
 
-        private async Task<int> GetConstituentId(Guid faceId)
+        private async Task<int> GetConstituentId(Guid personId)
         {
-            var sql = "select top 1 ConstituentId from dbo.Constituents where FaceId = @faceId";
+            var sql = "select top 1 ConstituentId from dbo.Constituents where PersonId = @personId";
 
             var results = await _sqlHandler.QueryAsync(
                 sql,
-                new Dictionary<string, dynamic> { { "faceId", faceId.ToString() } },
+                new Dictionary<string, dynamic> { { "personId", personId.ToString() } },
                 (reader) => reader.GetInt32(0));
 
             return results.FirstOrDefault();

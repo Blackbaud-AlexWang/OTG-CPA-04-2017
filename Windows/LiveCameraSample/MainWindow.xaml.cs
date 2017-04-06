@@ -215,7 +215,7 @@ namespace LiveCameraSample
                     Console.WriteLine("Identified as {0}", person.Name);
 
                     var constituentId = await GetConstituentId(identifyResult.FaceId);
-                    var constituent = await _constituentHandler.GetConstituent(constituentId);
+                    var constituent = _constituentHandler.GetConstituent(constituentId);
                 }
             }
 
@@ -511,12 +511,12 @@ namespace LiveCameraSample
         {
             var sql = "select top 1 ConstituentId from dbo.Constituents where FaceId = @faceId";
 
-            var constituentId = await _sqlHandler.QueryAsync(
+            var results = await _sqlHandler.QueryAsync(
                 sql,
                 new Dictionary<string, dynamic> { { "faceId", faceId.ToString() } },
                 (reader) => reader.GetInt32(0));
 
-            return constituentId.FirstOrDefault();
+            return results.FirstOrDefault();
         }
 
         private void MatchAndReplaceFaceRectangles(Face[] faces, OpenCvSharp.Rect[] clientRects)

@@ -42,6 +42,7 @@ namespace BasicConsoleSample
     {
         private static void Main(string[] args)
         {
+            //Test
 
         }
         //private static void Main(string[] args)

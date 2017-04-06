@@ -196,6 +196,29 @@ namespace LiveCameraSample
             var attrs = new List<FaceAttributeType> { FaceAttributeType.Age,
                 FaceAttributeType.Gender, FaceAttributeType.HeadPose };
             var faces = await _faceClient.DetectAsync(jpg, returnFaceAttributes: attrs);
+
+            // Identify face
+            var faceIds = faces.Select(face => face.FaceId).ToArray();
+            var results = await _faceClient.IdentifyAsync("myfriends", faceIds);
+            foreach (var identifyResult in results)
+            {
+                Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
+                if (identifyResult.Candidates.Length == 0)
+                {
+                    Console.WriteLine("No one identified");
+                }
+                else
+                {
+                    // Get top 1 among all candidates returned
+                    var candidateId = identifyResult.Candidates[0].PersonId;
+                    var person = await _faceClient.GetPersonAsync("myfriends", candidateId);
+                    Console.WriteLine("Identified as {0}", person.Name);
+
+                    var constituentId = await GetConstituentId(identifyResult.FaceId);
+                    var constituent = await _constituentHandler.GetConstituent(constituentId);
+                }
+            }
+
             // Count the API call. 
             Properties.Settings.Default.FaceAPICallCount++;
             // Output. 
@@ -484,17 +507,16 @@ namespace LiveCameraSample
             };
         }
 
-        private async Task<Constituent> GetConstituent(Guid faceId)
+        private async Task<int> GetConstituentId(Guid faceId)
         {
             var sql = "select top 1 ConstituentId from dbo.Constituents where FaceId = @faceId";
 
-            var constituentId = 0;
-            _sqlHandler.Query(
-                sql, 
+            var constituentId = await _sqlHandler.QueryAsync(
+                sql,
                 new Dictionary<string, dynamic> { { "faceId", faceId.ToString() } },
-                (reader) => constituentId = reader.GetInt32(0));
+                (reader) => reader.GetInt32(0));
 
-            return await _constituentHandler.GetConstituent(constituentId);
+            return constituentId.FirstOrDefault();
         }
 
         private void MatchAndReplaceFaceRectangles(Face[] faces, OpenCvSharp.Rect[] clientRects)

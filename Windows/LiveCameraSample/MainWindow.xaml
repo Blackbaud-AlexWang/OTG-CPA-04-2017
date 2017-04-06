@@ -13,6 +13,8 @@
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar">
+            <Button Content="Login" Padding="5,0" Margin="5,5,0,5" Click="LoginButton_Click" />
+            <Button Content="GetRowe" Padding="5,0" Margin="5,5,0,5" Click="GetRowe_Click" />
             <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
             <Button Content="Start Camera" Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click" />
             <Button Content="Stop Camera" Padding="5,0" Margin="5,5,0,5" Click="StopButton_Click" />

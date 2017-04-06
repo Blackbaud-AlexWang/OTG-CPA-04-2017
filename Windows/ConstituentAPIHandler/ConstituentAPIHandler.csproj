@@ -84,6 +84,8 @@
     <Compile Include="API\ConstituentHandler.cs" />
     <Compile Include="API\Headers.cs" />
     <Compile Include="Contracts\Constituent.cs" />
+    <Compile Include="Contracts\ContractMappers.cs" />
+    <Compile Include="Contracts\GivingHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup>

@@ -18,7 +18,9 @@ namespace ConstituentAPIHandler.Contracts
             {
                 ConstituentId = Convert.ToInt32(serializedResponse["content"]["id"].ToString()),
                 PreferredName = serializedResponse["content"]["preferred_name"].ToString(),
-                LastName = serializedResponse["content"]["last_name"].ToString(),
+                FirstName = serializedResponse["content"]["first"].ToString(),
+                LastName = serializedResponse["content"]["last"].ToString(),
+                FuillName = serializedResponse["content"]["name"].ToString(),
                 Name = SelectName(serializedResponse),
                 Age = Convert.ToInt32(serializedResponse["content"]["age"].ToString()),
                 EmailAddress = serializedResponse["content"]["email"]["address"].ToString(),

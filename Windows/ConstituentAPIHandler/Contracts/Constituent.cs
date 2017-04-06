@@ -10,6 +10,8 @@ namespace ConstituentAPIHandler.Contracts
         public int ConstituentId { get; set; }
         public string Name { get; set; }
         public string PreferredName { get; set; }
+        public string FirstName { get; set; }
+        public string FuillName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
         public string EmailAddress { get; set; }

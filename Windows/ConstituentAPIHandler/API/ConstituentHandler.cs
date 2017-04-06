@@ -15,33 +15,40 @@ namespace CSHttpClientSample
         public ConstituentHandler(HttpClient client)
         {
             _client = client;
-            _client.DefaultRequestHeaders.Add("bb-api-subscription-key", Headers.SubscriptionKey);
-            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Headers.AccessKey}");
+            ConfigureClient(_client);
             _mapper = new ContractMappers();
         }
 
-        public async Task<Constituent> GetConstituent(int constituentId)
+        private static void ConfigureClient(HttpClient client)
         {
-            var uri = $"https://api.sky.blackbaud.com/constituent/v1/constituents/{constituentId}";
-            var response = await _client.GetAsync(uri);
+            
+            client.DefaultRequestHeaders.Add("bb-api-subscription-key", Headers.SubscriptionKey);
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Headers.AccessKey}");
+            client.BaseAddress = new Uri("https://api.sky.blackbaud.com/constituent/v1/constituents/");
+        }
+
+        public Constituent GetConstituent(int constituentId)
+        { 
+            var uri = _client.BaseAddress + constituentId.ToString();
+            var response =  _client.GetAsync(uri).Result;
+            var stringData = response.Content.ReadAsStringAsync().Result;
             if (response.StatusCode == HttpStatusCode.Unauthorized) { throw new Exception("Unauthorized, submit new access key"); }
             var result = response.Content;
             return _mapper.MapToConstituent(result);
         }
-        public async Task<GivingHistory> GetGivingHistory(int constituentId)
+        public GivingHistory GetGivingHistory(int constituentId)
         {
-            var uri = $"https://api.sky.blackbaud.com/constituent/v1/constituents/{constituentId}/givingsummary/lifetimegiving";
-            var response = await _client.GetAsync(uri);
+            var uri = _client.BaseAddress +  $"{constituentId}/givingsummary/lifetimegiving";
+            var response = _client.GetAsync(uri).Result;
             if (response.StatusCode == HttpStatusCode.Unauthorized) { throw new Exception("Unauthorized, submit new access key"); }
             var result = response.Content;
             return _mapper.MapToGivingHistory(result);
         }
 
-        public async Task<int> SearchConstituent(string name)
+        public int SearchConstituent(string name)
         {
-            var uri = $"https://api.sky.blackbaud.com/constituent/v1/constituents/search?search_text={name}";
-
-            var response = await _client.GetAsync(uri);
+            var uri = _client.BaseAddress + $"search?search_text={name}";
+            var response = _client.GetAsync(uri).Result;
             if (response.StatusCode == HttpStatusCode.Unauthorized) {  throw new Exception("Unauthorized, submit new access key");}
             var result = response.Content;
             return _mapper.GetConstitID(result);

@@ -95,7 +95,7 @@ namespace LiveCameraSample
         {
             InitializeComponent();
 
-            this.DataContext = new ConstituentData();
+            this.DataContext = new Constituent();
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
@@ -432,7 +432,7 @@ namespace LiveCameraSample
             // Reset message. 
             MessageArea.Text = "";
 
-            // Record start time, for auto-stop
+             // Record start time, for auto-stop
             _startTime = DateTime.Now;
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);

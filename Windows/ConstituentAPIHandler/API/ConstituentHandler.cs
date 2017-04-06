@@ -15,14 +15,15 @@ namespace CSHttpClientSample
         public ConstituentHandler(HttpClient client)
         {
             _client = client;
-            ConfigureClient(_client, new Headers());
+            ConfigureClient(_client);
             _mapper = new ContractMappers();
         }
 
-        private static void ConfigureClient(HttpClient client, Headers headers)
+        private static void ConfigureClient(HttpClient client)
         {
-            client.DefaultRequestHeaders.Add("bb-api-subscription-key", headers.SubscriptionKey);
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {headers.AccessKey}");
+            
+            client.DefaultRequestHeaders.Add("bb-api-subscription-key", Headers.SubscriptionKey);
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {Headers.AccessKey}");
             client.BaseAddress = new Uri("https://api.sky.blackbaud.com/constituent/v1/constituents/");
         }
 

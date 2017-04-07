@@ -54,5 +54,18 @@ namespace ConstituentAPIHandler.Contracts
                 TotalReceivedMatchingGifts = Convert.ToInt32(serializedResponse["total_received_matching_gifts"]["value"]),
             };
         }
+
+        public LastGift MapToLastGift(HttpContent content)
+        {
+            var responseDate = content.ReadAsStringAsync().Result;
+            var serializedResponse = JObject.Parse(responseDate);
+            return new LastGift
+            {
+                DateGiven = Convert.ToDateTime(serializedResponse["date"]),
+                Amount = Convert.ToDecimal(serializedResponse["amount"]["value"]),
+                Type = serializedResponse["type"].ToString(),
+            };
+        }
+
     }
 }

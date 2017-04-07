@@ -86,6 +86,7 @@
     <Compile Include="Contracts\Constituent.cs" />
     <Compile Include="Contracts\ContractMappers.cs" />
     <Compile Include="Contracts\GivingHistory.cs" />
+    <Compile Include="Contracts\LastGift.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup>

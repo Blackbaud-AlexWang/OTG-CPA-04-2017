@@ -17,5 +17,6 @@ namespace ConstituentAPIHandler.Contracts
         public string Phone { get; set; }
         public DateTime? DateAdded { get; set; }
         public GivingHistory GivingHistory { get; set; }
+        public LastGift LastGift { get; set; }
     }
 }

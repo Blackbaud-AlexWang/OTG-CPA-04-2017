@@ -235,6 +235,7 @@ namespace LiveCameraSample
 
                 // Start trying to get giving history
                 var givingHistoryTask = GetGivingHistory(candidateId);
+                var lastGiftTask = GetLastGift(candidateId);
 
                 //var person = await _faceClient.GetPersonAsync(_personGroup, candidateId);
                 //Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
@@ -245,6 +246,7 @@ namespace LiveCameraSample
                 {
                     var constituent = _constituentHandler.GetConstituent(constituentId);
                     constituent.GivingHistory = await givingHistoryTask;
+                    constituent.LastGift = await lastGiftTask;
                     constituents.Add(identifyResult.FaceId, constituent);
                 }
             }
@@ -261,6 +263,17 @@ namespace LiveCameraSample
             }
 
             return _constituentHandler.GetGivingHistory(givingHistoryId);
+        }
+
+        private async Task<LastGift> GetLastGift(Guid personId)
+        {
+            var givingHistoryId = await GetGivingHistortyId(personId);
+            if (givingHistoryId == 0)
+            {
+                return new LastGift();
+            }
+
+            return _constituentHandler.GetLastGift(givingHistoryId);
         }
 
         private BitmapSource VisualizeResult(VideoFrame frame)
@@ -372,58 +385,19 @@ namespace LiveCameraSample
             OauthLogin();
         }
 
-        public struct URLDetails
-        {
-            /// <summary>
-            /// URL (location)
-            /// </summary>
-            public string URL;
-
-            /// <summary>
-            /// Document title
-            /// </summary>
-            public string Title;
-        }
-        
-
-        /// <summary>
-        /// Retrieve the current open URLs in Internet Explorer
-        /// </summary>
-        /// <returns></returns>
-        public static void OauthLogin()
+        private static void OauthLogin()
         {
             var shellWindows = new SHDocVw.ShellWindows();
             while (true)
             {
                 foreach (SHDocVw.InternetExplorer ie in shellWindows)
                 {
-                    if (ie.LocationURL.Contains("callback#"))
-                    {
-                        var code = GetToken(ie.LocationURL);
-                        Headers.AccessKey = code;
-                        return;
-                    }
+                    if (!ie.LocationURL.Contains("callback#")) continue;
+                    Headers.AccessKey = GetToken(ie.LocationURL);
+                    return;
                 }
             }
         }
-
-
-        //private void oauthBrowser_Navigated( )
-        //{
-        //    var urls = OauthLogin();
-        //    var properSite = true;
-        //    if (urls.Any(u => u.URL.Contains("callback#")))
-        //    {
-        //        var code = GetToken(urls.First(u => u.URL.Contains("callback#")).URL);
-        //        Headers.AccessKey = code;
-        //        properSite = false;
-        //    }
-        //    else if (properSite)
-        //    {
-        //        oauthBrowser_Navigated();
-        //        //urls = OauthLogin();
-        //    }
-        //}
 
         private static string GetToken(string url)
         {
@@ -431,14 +405,7 @@ namespace LiveCameraSample
             var length = url.IndexOf("&") - start;
             return url.Substring(start + 1, length - 1);
         }
-
-        private void GetRowe_Click(object sender, RoutedEventArgs e)
-        {
-            _constituentHandler = new ConstituentHandler(new HttpClient());
-            var rowe = _constituentHandler.GetConstituent(914);
-            var history = _constituentHandler.GetGivingHistory(914);
-        }
-
+        
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             if (!CameraList.HasItems)

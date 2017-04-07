@@ -94,8 +94,11 @@ namespace LiveCameraSample
         public MainWindow()
         {
             InitializeComponent();
-
             this.DataContext = new Constituent();
+
+            ButtonBar.Background = new SolidColorBrush(Color.FromRgb(0x90, 0xa4, 0xae));
+            ConstituentInfoPanel.Background = new SolidColorBrush(Color.FromRgb(0xee, 0xee, 0xee));
+            //ShowHideBar.Background = new SolidColorBrush(Color.FromRgb(0x78, 0x90, 0x9c));
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
@@ -202,30 +205,30 @@ namespace LiveCameraSample
         private async Task<Dictionary<Guid, Constituent>> IdentifyConstituentFaces(Face[] faces)
         {
             var constituents = new Dictionary<Guid, Constituent>();
-            if (faces.Count() == 0) return constituents;
+            //if (faces.Count() == 0) return constituents;
 
-            var faceIds = faces.Select(face => face.FaceId).ToArray();
-            var results = await _faceClient.IdentifyAsync("myfriends", faceIds);
-            foreach (var identifyResult in results.Where(r => r.Candidates.Length > 0))
-            {
-                if (constituents.ContainsKey(identifyResult.FaceId))
-                {
-                    continue;
-                }
+            //var faceIds = faces.Select(face => face.FaceId).ToArray();
+            //var results = await _faceClient.IdentifyAsync("myfriends", faceIds);
+            //foreach (var identifyResult in results.Where(r => r.Candidates.Length > 0))
+            //{
+            //    if (constituents.ContainsKey(identifyResult.FaceId))
+            //    {
+            //        continue;
+            //    }
 
-                Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
-                // Get top 1 among all candidates returned
-                var candidateId = identifyResult.Candidates[0].PersonId;
-                var person = await _faceClient.GetPersonAsync("myfriends", candidateId);
-                Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
+            //    Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
+            //    // Get top 1 among all candidates returned
+            //    var candidateId = identifyResult.Candidates[0].PersonId;
+            //    var person = await _faceClient.GetPersonAsync("myfriends", candidateId);
+            //    Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
 
-                var constituentId = await GetConstituentId(candidateId);
-                Console.WriteLine("ConstituentId: {0}", constituentId);
-                if (constituentId > 0)
-                {
-                    constituents.Add(identifyResult.FaceId, _constituentHandler.GetConstituent(constituentId));
-                }
-            }
+            //    var constituentId = await GetConstituentId(candidateId);
+            //    Console.WriteLine("ConstituentId: {0}", constituentId);
+            //    if (constituentId > 0)
+            //    {
+            //        constituents.Add(identifyResult.FaceId, _constituentHandler.GetConstituent(constituentId));
+            //    }
+            //}
 
             return constituents;
         }

@@ -5,35 +5,79 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LiveCameraSample"
         mc:Ignorable="d"
-        Title="Constituent Facial Recognition" Height="725" Width="956">
+        Title="Constituent Facial Recognition" Height="550" Width="725">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar">
-            <Button Content="Login" Padding="5,0" Margin="5,5,0,5" Click="LoginButton_Click" />
-            <Button Content="GetRowe" Padding="5,0" Margin="5,5,0,5" Click="GetRowe_Click" />
-            <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
-            <Button Content="Start Camera" Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click" />
-            <Button Content="Stop Camera" Padding="5,0" Margin="5,5,0,5" Click="StopButton_Click" />
-            <TextBlock VerticalAlignment="Center" Margin="15,5,0,5" Text="Mode:" />
-            <ComboBox x:Name="ModeList" Width="100" Margin="5,5,0,5" Loaded="ModeList_Loaded" SelectionChanged="ModeList_SelectionChanged" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ShowHideBar" HorizontalAlignment="Right">
-            <Button Content="Show/Hide Settings" Padding="5,0" Margin="5" Click="SettingsButton_Click" />
-            <Button Content="Show/Hide Constituent Information" Padding="5,0" Margin="5" Click="ConstituentInfoButton_Click" />
-        </StackPanel>
-        <Grid Margin="0,25,0,10" Grid.RowSpan="2">
+        <Border Grid.Row="0" BorderBrush="#616161" BorderThickness="1 1 1 2">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar">
+                <Button Content="Login" Padding="5,0" Margin="5,5,0,5" Click="LoginButton_Click" />
+                <Button Content="GetRowe" Padding="5,0" Margin="5,5,0,5" Click="GetRowe_Click" />
+                <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
+                <Button Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click">
+                    <Image Source="Icons\record-rec.png"></Image>
+                </Button>
+                <Button Padding="5,0" Margin="5,5,0,5" Click="StopButton_Click">
+                    <Image Source="Icons\stop-circle.png"></Image>
+                </Button>
+                <TextBlock VerticalAlignment="Center" Margin="15,5,0,5" Text="Mode:" FontWeight="Bold"/>
+                <ComboBox x:Name="ModeList" Width="100" Margin="5,5,0,5" Loaded="ModeList_Loaded" SelectionChanged="ModeList_SelectionChanged" />
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="0" BorderBrush="#616161" BorderThickness="1 1 1 2">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ShowHideBar" HorizontalAlignment="Right">
+                <Button Padding="5,0" Margin="5" Click="SettingsButton_Click">
+                    <Image Source="Icons\settings.png"></Image>
+                </Button>
+                <Button Content="Show/Hide Constituent Information" Padding="5,0" Margin="5" Click="ConstituentInfoButton_Click" />
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" BorderBrush="#616161" BorderThickness="1 0 1 2" Name="ConstituentInfoPanel">
+            <StackPanel Grid.Row="1" Visibility="{Binding Path=Visibility, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Panel.ZIndex="3">
+                <TextBlock Margin="5" FontWeight="Bold" Text="Constituent Information" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="First Name:" />
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name}" />
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="2" Text="Last Name:" />
+                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="3" Text="{Binding Path=LastName}" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Age:" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Age}" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="2" Text="Phone Number:" />
+                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="3" Text="{Binding Path=Phone}" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Email:" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=EmailAddress}" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="2" Text="Website:" />
+                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="3" Text="{Binding Path=EmailAddress}" />
+                </Grid>
+            </StackPanel>
+        </Border>
+        
+        <Grid Margin="0,0,0,0" Grid.Row="2" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <!--<ColumnDefinition Width="*" />-->
             </Grid.ColumnDefinitions>
-            <Image x:Name="LeftImage" Grid.Column="1" Margin="5" />
+            <Image x:Name="LeftImage" Grid.Column="0" Margin="5" Panel.ZIndex="3"/>
             <Image Visibility="Hidden" x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="5" />
-            <StackPanel Visibility="{Binding Source={StaticResource Settings}, Path=Default.SettingsPanelVisibility, Mode=TwoWay}" Grid.Column="1" Panel.ZIndex="2" Name="SettingsPanel" Background="LightGray" VerticalAlignment="Top" Margin="5">
+            <StackPanel Visibility="{Binding Source={StaticResource Settings}, Path=Default.SettingsPanelVisibility, Mode=TwoWay}" Grid.Column="0" Panel.ZIndex="4" Name="SettingsPanel" Background="LightGray" VerticalAlignment="Top" Margin="5">
                 <TextBlock Margin="5" Grid.Row="0" FontWeight="Bold" Text="Settings"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -67,34 +111,7 @@
                 <CheckBox Margin="5" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.AutoStopEnabled}" ContentStringFormat="Automatically stop after {0}" Content="{Binding Source={StaticResource Settings}, Path=Default.AutoStopTime}" />
                 <Button Margin="5" Content="Save" Click="SaveSettingsButton_Click" />
             </StackPanel>
-            <StackPanel Visibility="{Binding Path=Visibility, Mode=TwoWay}" Grid.Column="2" Panel.ZIndex="2" Name="ConstituentInfoPanel" Background="LightGreen" VerticalAlignment="Top" Margin="5,5,0,0" Grid.ColumnSpan="2">
-                <TextBlock Margin="5" Grid.Row="0" FontWeight="Bold" Text="Constituent Information"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="First Name:" />
-                    <TextBlock Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name}" />
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Last Name:" />
-                    <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=LastName}" />
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Age:" />
-                    <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=Age}" />
-                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="0" Text="Phone Number:" />
-                    <TextBlock Margin="5" Grid.Row="3" Grid.Column="1" Text="{Binding Path=Phone}" />
-                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="0" Text="Email:" />
-                    <TextBlock Margin="5" Grid.Row="4" Grid.Column="1" Text="{Binding Path=EmailAddress}" />
-                </Grid>
-            </StackPanel>
         </Grid>
-        <TextBlock Name="MessageArea" Margin="5" Grid.Row="2" VerticalAlignment="Center" />
+        <TextBlock Name="MessageArea" Margin="5" Grid.Row="3" VerticalAlignment="Center" />
     </Grid>
 </Window>

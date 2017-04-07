@@ -91,6 +91,9 @@ namespace LiveCameraSample
             Faces
         }
 
+        private const string _connectionString = "Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI";
+        private const string _personGroup = "otg";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -205,7 +208,7 @@ namespace LiveCameraSample
             if (faces.Count() == 0) return constituents;
 
             var faceIds = faces.Select(face => face.FaceId).ToArray();
-            var results = await _faceClient.IdentifyAsync("myfriends", faceIds);
+            var results = await _faceClient.IdentifyAsync(_personGroup, faceIds);
             foreach (var identifyResult in results.Where(r => r.Candidates.Length > 0))
             {
                 if (constituents.ContainsKey(identifyResult.FaceId))
@@ -216,7 +219,7 @@ namespace LiveCameraSample
                 Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
                 // Get top 1 among all candidates returned
                 var candidateId = identifyResult.Candidates[0].PersonId;
-                var person = await _faceClient.GetPersonAsync("myfriends", candidateId);
+                var person = await _faceClient.GetPersonAsync(_personGroup, candidateId);
                 Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
 
                 var constituentId = await GetConstituentId(candidateId);
@@ -424,7 +427,7 @@ namespace LiveCameraSample
             _constituentHandler = new ConstituentHandler(new HttpClient());
 
             // Create sql client
-            _sqlHandler = new SqlHandler("Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI");
+            _sqlHandler = new SqlHandler(_connectionString);
 
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);

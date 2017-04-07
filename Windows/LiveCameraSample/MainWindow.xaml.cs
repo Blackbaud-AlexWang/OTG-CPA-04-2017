@@ -91,7 +91,7 @@ namespace LiveCameraSample
             Faces
         }
 
-        private const string _connectionString = "Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI";
+        private const string _connectionString = "Data Source=CHS6TYRIEKMOR03;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI";
         private const string _personGroup = "otg";
 
         public MainWindow()

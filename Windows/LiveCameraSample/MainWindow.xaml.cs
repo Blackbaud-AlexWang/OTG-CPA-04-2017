@@ -91,13 +91,16 @@ namespace LiveCameraSample
             Faces
         }
 
+        private const string _connectionString = "Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI";
+        private const string _personGroup = "otg";
+
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = new Constituent();
 
-            ButtonBar.Background = new SolidColorBrush(Color.FromRgb(0x90, 0xa4, 0xae));
-            ConstituentInfoPanel.Background = new SolidColorBrush(Color.FromRgb(0xee, 0xee, 0xee));
+            // ButtonBar.Background = new SolidColorBrush(Color.FromRgb(0xf0, 0xad, 0x4e));
+            ConstituentInfoPanel.Background = new SolidColorBrush(Color.FromRgb(0x5c, 0xb8, 0x5c));
             //ShowHideBar.Background = new SolidColorBrush(Color.FromRgb(0x78, 0x90, 0x9c));
 
             // Create grabber. 
@@ -113,6 +116,16 @@ namespace LiveCameraSample
                     // Display the image in the left pane.
                     // LeftImage.Source = e.Frame.Image.ToBitmapSource();
                     LeftImage.Source = LeftImageVisualResults(e.Frame);
+
+                    // MOVE THIS
+                    var result = _latestResultsToDisplay;
+                    if (result != null 
+                        && result.Faces != null 
+                        && result.Faces.Count() > 0
+                        && result.Constituents.ContainsKey(result.Faces[0].FaceId))
+                    {
+                        DataContext = result.Constituents[result.Faces[0].FaceId];
+                    }
 
                     // If we're fusing client-side face detection with remote analysis, show the
                     // new frame now with the most recent analysis available. 
@@ -205,32 +218,63 @@ namespace LiveCameraSample
         private async Task<Dictionary<Guid, Constituent>> IdentifyConstituentFaces(Face[] faces)
         {
             var constituents = new Dictionary<Guid, Constituent>();
-            //if (faces.Count() == 0) return constituents;
+            if (faces.Count() == 0) return constituents;
 
-            //var faceIds = faces.Select(face => face.FaceId).ToArray();
-            //var results = await _faceClient.IdentifyAsync("myfriends", faceIds);
-            //foreach (var identifyResult in results.Where(r => r.Candidates.Length > 0))
-            //{
-            //    if (constituents.ContainsKey(identifyResult.FaceId))
-            //    {
-            //        continue;
-            //    }
+            var faceIds = faces.Select(face => face.FaceId).ToArray();
+            var results = await _faceClient.IdentifyAsync(_personGroup, faceIds);
+            foreach (var identifyResult in results.Where(r => r.Candidates.Length > 0))
+            {
+                if (constituents.ContainsKey(identifyResult.FaceId))
+                {
+                    continue;
+                }
 
-            //    Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
-            //    // Get top 1 among all candidates returned
-            //    var candidateId = identifyResult.Candidates[0].PersonId;
-            //    var person = await _faceClient.GetPersonAsync("myfriends", candidateId);
-            //    Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
+                Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
+                // Get top 1 among all candidates returned
+                var candidateId = identifyResult.Candidates[0].PersonId;
 
-            //    var constituentId = await GetConstituentId(candidateId);
-            //    Console.WriteLine("ConstituentId: {0}", constituentId);
-            //    if (constituentId > 0)
-            //    {
-            //        constituents.Add(identifyResult.FaceId, _constituentHandler.GetConstituent(constituentId));
-            //    }
-            //}
+                // Start trying to get giving history
+                var givingHistoryTask = GetGivingHistory(candidateId);
+
+                var lastGiftTask = GetLastGift(candidateId);
+
+                //var person = await _faceClient.GetPersonAsync(_personGroup, candidateId);
+                //Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
+
+                var constituentId = await GetConstituentId(candidateId);
+                Console.WriteLine("ConstituentId: {0}", constituentId);
+                if (constituentId > 0)
+                {
+                    var constituent = _constituentHandler.GetConstituent(constituentId);
+                    constituent.GivingHistory = await givingHistoryTask;
+                    constituent.LastGift = await lastGiftTask;
+                    constituents.Add(identifyResult.FaceId, constituent);
+                }
+            }
 
             return constituents;
+        }
+
+        private async Task<GivingHistory> GetGivingHistory(Guid personId)
+        {
+            var givingHistoryId = await GetGivingHistortyId(personId);
+            if (givingHistoryId == 0)
+            {
+                return new GivingHistory();
+            }
+
+            return _constituentHandler.GetGivingHistory(givingHistoryId);
+        }
+
+        private async Task<LastGift> GetLastGift(Guid personId)
+        {
+            var givingHistoryId = await GetGivingHistortyId(personId);
+            if (givingHistoryId == 0)
+            {
+                return new LastGift();
+            }
+
+            return _constituentHandler.GetLastGift(givingHistoryId);
         }
 
         private BitmapSource VisualizeResult(VideoFrame frame)
@@ -252,7 +296,7 @@ namespace LiveCameraSample
                     MatchAndReplaceFaceRectangles(result.Faces, clientFaces);
                 }
 
-                visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames);
+                visImage = Visualization.DrawFaces(visImage, result.Faces, result.Constituents);
                 visImage = Visualization.DrawTags(visImage, result.Tags);        
             }
 
@@ -278,7 +322,7 @@ namespace LiveCameraSample
                     MatchAndReplaceFaceRectangles(result.Faces, clientFaces);
                 }
 
-                visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames);
+                visImage = Visualization.DrawFaces(visImage, result.Faces, result.Constituents);
                 visImage = Visualization.DrawTags(visImage, result.Tags);
             }
 
@@ -342,37 +386,16 @@ namespace LiveCameraSample
             OauthLogin();
         }
 
-        public struct URLDetails
-        {
-            /// <summary>
-            /// URL (location)
-            /// </summary>
-            public string URL;
-
-            /// <summary>
-            /// Document title
-            /// </summary>
-            public string Title;
-        }
-        
-
-        /// <summary>
-        /// Retrieve the current open URLs in Internet Explorer
-        /// </summary>
-        /// <returns></returns>
-        public static void OauthLogin()
+        private static void OauthLogin()
         {
             var shellWindows = new SHDocVw.ShellWindows();
             while (true)
             {
                 foreach (SHDocVw.InternetExplorer ie in shellWindows)
                 {
-                    if (ie.LocationURL.Contains("callback#"))
-                    {
-                        var code = GetToken(ie.LocationURL);
-                        Headers.AccessKey = code;
-                        return;
-                    }
+                    if (!ie.LocationURL.Contains("callback#")) continue;
+                    Headers.AccessKey = GetToken(ie.LocationURL);
+                    return;
                 }
             }
         }
@@ -409,7 +432,7 @@ namespace LiveCameraSample
             _constituentHandler = new ConstituentHandler(new HttpClient());
 
             // Create sql client
-            _sqlHandler = new SqlHandler("Data Source=CHS6DOUGSCO01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI");
+            _sqlHandler = new SqlHandler(_connectionString);
 
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
@@ -453,6 +476,18 @@ namespace LiveCameraSample
         private async Task<int> GetConstituentId(Guid personId)
         {
             var sql = "select top 1 ConstituentId from dbo.Constituents where PersonId = @personId";
+
+            var results = await _sqlHandler.QueryAsync(
+                sql,
+                new Dictionary<string, dynamic> { { "personId", personId.ToString() } },
+                (reader) => reader.GetInt32(0));
+
+            return results.FirstOrDefault();
+        }
+
+        private async Task<int> GetGivingHistortyId(Guid personId)
+        {
+            var sql = "select top 1 GivingHistoryId from dbo.Constituents where PersonId = @personId";
 
             var results = await _sqlHandler.QueryAsync(
                 sql,

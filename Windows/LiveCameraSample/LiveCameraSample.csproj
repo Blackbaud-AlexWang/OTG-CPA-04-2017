@@ -110,10 +110,6 @@
     <Compile Include="CelebritiesResult.cs" />
     <Compile Include="LiveCameraResult.cs" />
     <Compile Include="Visualization.cs" />
-    <Page Include="Icons\record-rec.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -159,8 +155,10 @@
     <Content Include="Data\haarcascade_frontalface_alt2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Icons\setting.png" />
+    <Resource Include="Icons\stop.png" />
+    <Resource Include="Icons\record.png" />
     <Resource Include="Icons\record-rec.png" />
-    <Resource Include="Icons\settings.png" />
     <Resource Include="Icons\stop-circle.png" />
     <Resource Include="test.txt" />
   </ItemGroup>

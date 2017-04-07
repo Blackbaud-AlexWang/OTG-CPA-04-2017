@@ -31,9 +31,15 @@ namespace CSHttpClientSample
 
         public Constituent GetConstituent(int constituentId)
         {
-            var thing = Headers.AccessKey;
             var uri = _client.BaseAddress + constituentId.ToString();
             var response =  _client.GetAsync(uri).Result;
+            var result = response.Content;
+            return _mapper.MapToConstituent(result);
+        }
+        public Constituent GetLastGift(int constituentId)
+        {
+            var uri = _client.BaseAddress + $"{constituentId}/givingsummary/latest";
+            var response = _client.GetAsync(uri).Result;
             var result = response.Content;
             return _mapper.MapToConstituent(result);
         }

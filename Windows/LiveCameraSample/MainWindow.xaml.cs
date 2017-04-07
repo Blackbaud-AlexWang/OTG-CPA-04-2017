@@ -97,10 +97,9 @@ namespace LiveCameraSample
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new Constituent();
 
-            ButtonBar.Background = new SolidColorBrush(Color.FromRgb(0x90, 0xa4, 0xae));
-            ConstituentInfoPanel.Background = new SolidColorBrush(Color.FromRgb(0xee, 0xee, 0xee));
+            ButtonBar.Background = new SolidColorBrush(Color.FromRgb(0x5c, 0xb8, 0x5c));
+            ConstituentInfoPanel.Background = new SolidColorBrush(Color.FromRgb(0x5b, 0xc0, 0xde));
             //ShowHideBar.Background = new SolidColorBrush(Color.FromRgb(0x78, 0x90, 0x9c));
 
             // Create grabber. 
@@ -256,7 +255,7 @@ namespace LiveCameraSample
                 }
 
                 visImage = Visualization.DrawFaces(visImage, result.Faces, result.EmotionScores, result.CelebrityNames);
-                visImage = Visualization.DrawTags(visImage, result.Tags);        
+                visImage = Visualization.DrawTags(visImage, result.Tags);
             }
 
             return visImage;
@@ -357,7 +356,7 @@ namespace LiveCameraSample
             /// </summary>
             public string Title;
         }
-        
+
 
         /// <summary>
         /// Retrieve the current open URLs in Internet Explorer
@@ -438,7 +437,7 @@ namespace LiveCameraSample
             // Reset message. 
             MessageArea.Text = "";
 
-             // Record start time, for auto-stop
+            // Record start time, for auto-stop
             _startTime = DateTime.Now;
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);

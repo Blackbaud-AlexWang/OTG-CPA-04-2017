@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LiveCameraSample"
         mc:Ignorable="d"
-        Title="Constituent Facial Recognition" Height="500" Width="750">
+        Title="Constituent Facial Recognition" Height="600" Width="850">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />

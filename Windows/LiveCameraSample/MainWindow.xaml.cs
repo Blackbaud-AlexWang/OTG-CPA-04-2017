@@ -339,7 +339,7 @@ namespace LiveCameraSample
             var url =
                 $"https://oauth2.sky.blackbaud.com/authorization?client_id={applicationId}&response_type=token&redirect_uri=https://www.example.com/oauth2/callback&state=fdf80155";
             Process.Start("IExplore.exe", url);
-            oauthBrowser_Navigated();
+            OauthLogin();
         }
 
         public struct URLDetails
@@ -354,44 +354,48 @@ namespace LiveCameraSample
             /// </summary>
             public string Title;
         }
-
-       
-
-        // requires the following DLL added as a reference:
-        // C:\Windows\System32\shdocvw.dll
+        
 
         /// <summary>
         /// Retrieve the current open URLs in Internet Explorer
         /// </summary>
         /// <returns></returns>
-        public static URLDetails[] InternetExplorer()
+        public static void OauthLogin()
         {
-            System.Collections.Generic.List<URLDetails> URLs = new System.Collections.Generic.List<URLDetails>();
             var shellWindows = new SHDocVw.ShellWindows();
-            foreach (SHDocVw.InternetExplorer ie in shellWindows)
-                URLs.Add(new URLDetails() { URL = ie.LocationURL, Title = ie.LocationName });
-            return URLs.ToArray();
-        }
-
-
-        private void oauthBrowser_Navigated( )
-        {
-            var urls = InternetExplorer();
-            var properSite = true;
-            if (urls.Any(u => u.URL.Contains("callback#")))
+            while (true)
             {
-                var code = GetToken(urls.First(u => u.URL.Contains("callback#")).URL);
-                Headers.AccessKey = code;
-                properSite = false;
-            }
-            else if (properSite)
-            {
-                oauthBrowser_Navigated();
-                //urls = InternetExplorer();
+                foreach (SHDocVw.InternetExplorer ie in shellWindows)
+                {
+                    if (ie.LocationURL.Contains("callback#"))
+                    {
+                        var code = GetToken(ie.LocationURL);
+                        Headers.AccessKey = code;
+                        return;
+                    }
+                }
             }
         }
 
-        private string GetToken(string url)
+
+        //private void oauthBrowser_Navigated( )
+        //{
+        //    var urls = OauthLogin();
+        //    var properSite = true;
+        //    if (urls.Any(u => u.URL.Contains("callback#")))
+        //    {
+        //        var code = GetToken(urls.First(u => u.URL.Contains("callback#")).URL);
+        //        Headers.AccessKey = code;
+        //        properSite = false;
+        //    }
+        //    else if (properSite)
+        //    {
+        //        oauthBrowser_Navigated();
+        //        //urls = OauthLogin();
+        //    }
+        //}
+
+        private static string GetToken(string url)
         {
             var start = url.IndexOf("=");
             var length = url.IndexOf("&") - start;

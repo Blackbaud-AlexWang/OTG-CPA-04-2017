@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstituentAPIHandler", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabasePopulator", "DatabasePopulator\DatabasePopulator.csproj", "{00185A76-5352-4F4A-9B8E-1807DEBFB615}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75B4DF25-CEE1-493B-A05E-5C54D2D0E15B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00185A76-5352-4F4A-9B8E-1807DEBFB615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00185A76-5352-4F4A-9B8E-1807DEBFB615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00185A76-5352-4F4A-9B8E-1807DEBFB615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00185A76-5352-4F4A-9B8E-1807DEBFB615}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -97,8 +97,11 @@ namespace LiveCameraSample
         public MainWindow()
         {
             InitializeComponent();
-
             this.DataContext = new Constituent();
+
+            ButtonBar.Background = new SolidColorBrush(Color.FromRgb(0x90, 0xa4, 0xae));
+            ConstituentInfoPanel.Background = new SolidColorBrush(Color.FromRgb(0xee, 0xee, 0xee));
+            //ShowHideBar.Background = new SolidColorBrush(Color.FromRgb(0x78, 0x90, 0x9c));
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();

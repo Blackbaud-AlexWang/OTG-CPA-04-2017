@@ -43,6 +43,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.ProjectOxford.Emotion.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
 using Microsoft.ProjectOxford.Vision.Contract;
+using ConstituentAPIHandler.Contracts;
 
 namespace LiveCameraSample
 {
@@ -101,7 +102,7 @@ namespace LiveCameraSample
             return DrawOverlay(baseImage, drawAction);
         }
 
-        public static BitmapSource DrawFaces(BitmapSource baseImage, Microsoft.ProjectOxford.Face.Contract.Face[] faces, Scores[] emotionScores, string[] celebName)
+        public static BitmapSource DrawFaces(BitmapSource baseImage, Microsoft.ProjectOxford.Face.Contract.Face[] faces, Dictionary<Guid, Constituent> constituents)
         {
             if (faces == null)
             {
@@ -120,20 +121,16 @@ namespace LiveCameraSample
                         face.FaceRectangle.Width, face.FaceRectangle.Height);
                     string text = "";
 
-                    if (face.FaceAttributes != null)
+                    if (constituents.ContainsKey(face.FaceId))
                     {
-                        text += Aggregation.SummarizeFaceAttributes(face.FaceAttributes);
+                        var constituent = constituents[face.FaceId];
+                        text += constituent.Name;
                     }
 
-                    if (emotionScores?[i] != null)
-                    {
-                        text += Aggregation.SummarizeEmotion(emotionScores[i]);
-                    }
-
-                    if (celebName?[i] != null)
-                    {
-                        text += celebName[i];
-                    }
+                    //if (face.FaceAttributes != null)
+                    //{
+                    //    text += Aggregation.SummarizeFaceAttributes(face.FaceAttributes);
+                    //}
 
                     faceRect.Inflate(6 * annotationScale, 6 * annotationScale);
 

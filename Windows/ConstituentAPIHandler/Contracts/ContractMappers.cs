@@ -22,7 +22,7 @@ namespace ConstituentAPIHandler.Contracts
                 Name = SelectName(serializedResponse),
                 Age = Convert.ToInt32(serializedResponse["age"].ToString()),
                 EmailAddress = serializedResponse["email"]["address"].ToString(),
-                WebSite = serializedResponse["online_presence"]["address"].ToString(),
+                WebSite = serializedResponse["phone"]["number"].ToString(),
                 DateAdded = Convert.ToDateTime(serializedResponse["date_added"].ToString())
             };
         }

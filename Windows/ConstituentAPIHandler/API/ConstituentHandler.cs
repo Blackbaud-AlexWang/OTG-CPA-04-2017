@@ -36,12 +36,12 @@ namespace CSHttpClientSample
             var result = response.Content;
             return _mapper.MapToConstituent(result);
         }
-        public Constituent GetLastGift(int constituentId)
+        public LastGift GetLastGift(int constituentId)
         {
             var uri = _client.BaseAddress + $"{constituentId}/givingsummary/latest";
             var response = _client.GetAsync(uri).Result;
             var result = response.Content;
-            return _mapper.MapToConstituent(result);
+            return _mapper.MapToLastGift(result);
         }
         public GivingHistory GetGivingHistory(int constituentId)
         {

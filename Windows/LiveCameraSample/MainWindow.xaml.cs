@@ -406,14 +406,7 @@ namespace LiveCameraSample
             var length = url.IndexOf("&") - start;
             return url.Substring(start + 1, length - 1);
         }
-
-        private void GetRowe_Click(object sender, RoutedEventArgs e)
-        {
-            _constituentHandler = new ConstituentHandler(new HttpClient());
-            var rowe = _constituentHandler.GetConstituent(914);
-            var history = _constituentHandler.GetGivingHistory(914);
-        }
-
+        
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             if (!CameraList.HasItems)

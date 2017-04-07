@@ -50,18 +50,7 @@ namespace CSHttpClientSample
             var result = response.Content;
             return _mapper.MapToGivingHistory(result);
         }
-
-        public int PostConstituent(Constituent constituent)
-        {
-           // var stringData = JsonConvert.SerializeObject(constituent);
-           // //var payload = Convert.To
-           // var uri = _client.BaseAddress;
-           //// var response = _client.PostAsync(uri, constituent as HttpContent).Result;
-           // var result = response.Content;
-           // return _mapper.GetConstitID(result);
-            return 0;
-        }
-
+        
         public int SearchConstituent(string name)
         {
             var uri = _client.BaseAddress + $"search?search_text={name}";

@@ -374,24 +374,6 @@ namespace LiveCameraSample
             }
         }
 
-
-        //private void oauthBrowser_Navigated( )
-        //{
-        //    var urls = OauthLogin();
-        //    var properSite = true;
-        //    if (urls.Any(u => u.URL.Contains("callback#")))
-        //    {
-        //        var code = GetToken(urls.First(u => u.URL.Contains("callback#")).URL);
-        //        Headers.AccessKey = code;
-        //        properSite = false;
-        //    }
-        //    else if (properSite)
-        //    {
-        //        oauthBrowser_Navigated();
-        //        //urls = OauthLogin();
-        //    }
-        //}
-
         private static string GetToken(string url)
         {
             var start = url.IndexOf("=");
@@ -424,7 +406,7 @@ namespace LiveCameraSample
             _constituentHandler = new ConstituentHandler(new HttpClient());
 
             // Create sql client
-            _sqlHandler = new SqlHandler("Data Source=CHS6ALEXWAN01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI");
+            _sqlHandler = new SqlHandler("Data Source=CHS6DOUGSCO01;Initial Catalog=OTG-CPA_04-2017;Integrated Security=SSPI");
 
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);

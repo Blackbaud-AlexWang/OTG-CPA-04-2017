@@ -17,13 +17,8 @@ namespace ConstituentAPIHandler.Contracts
             return new Constituent
             {
                 ConstituentId = Convert.ToInt32(serializedResponse["id"].ToString()),
-                FirstName = serializedResponse["first"].ToString(),
-                LastName = serializedResponse["last"].ToString(),
                 Name = SelectName(serializedResponse),
-                Age = Convert.ToInt32(serializedResponse["age"].ToString()),
-                EmailAddress = serializedResponse["email"]["address"].ToString(),
-                Phone = serializedResponse["phone"]["number"].ToString(),
-                DateAdded = Convert.ToDateTime(serializedResponse["date_added"].ToString())
+                Phone = serializedResponse["phone"]["number"].ToString()
             };
         }
         public int GetConstitID(HttpContent content)

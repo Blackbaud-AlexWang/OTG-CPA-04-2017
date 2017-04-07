@@ -116,16 +116,9 @@ namespace LiveCameraSample
                     // Display the image in the left pane.
                     // LeftImage.Source = e.Frame.Image.ToBitmapSource();
                     LeftImage.Source = LeftImageVisualResults(e.Frame);
-
-                    // MOVE THIS
-                    var result = _latestResultsToDisplay;
-                    if (result != null 
-                        && result.Faces != null 
-                        && result.Faces.Count() > 0
-                        && result.Constituents.ContainsKey(result.Faces[0].FaceId))
-                    {
-                        DataContext = result.Constituents[result.Faces[0].FaceId];
-                    }
+                    
+                    // Update data context
+                    DataContext = GetBannerInfo();
 
                     // If we're fusing client-side face detection with remote analysis, show the
                     // new frame now with the most recent analysis available. 
@@ -193,6 +186,20 @@ namespace LiveCameraSample
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
         }
 
+        private object GetBannerInfo()
+        {
+            var result = _latestResultsToDisplay;
+            if (result != null
+                && result.Faces != null
+                && result.Faces.Count() > 0
+                && result.Constituents.ContainsKey(result.Faces[0].FaceId))
+            {
+                return result.Constituents[result.Faces[0].FaceId];
+            }
+
+            return DataContext;
+        }
+
         /// <summary> Function which submits a frame to the Face API. </summary>
         /// <param name="frame"> The video frame to submit. </param>
         /// <returns> A <see cref="Task{LiveCameraResult}"/> representing the asynchronous API call,
@@ -232,11 +239,7 @@ namespace LiveCameraSample
                 Console.WriteLine("Result of face: {0}", identifyResult.FaceId);
                 // Get top 1 among all candidates returned
                 var candidateId = identifyResult.Candidates[0].PersonId;
-
-                // Start trying to get giving history
-                var givingHistoryTask = GetGivingHistory(candidateId);
-                var lastGiftTask = GetLastGift(candidateId);
-
+                
                 //var person = await _faceClient.GetPersonAsync(_personGroup, candidateId);
                 //Console.WriteLine("Identified as {0} {1}", person.Name, candidateId);
 
@@ -244,9 +247,13 @@ namespace LiveCameraSample
                 Console.WriteLine("ConstituentId: {0}", constituentId);
                 if (constituentId > 0)
                 {
-                    var constituent = _constituentHandler.GetConstituent(constituentId);
-                    constituent.GivingHistory = await givingHistoryTask;
-                    constituent.LastGift = await lastGiftTask;
+                    var constituent = await _constituentHandler.GetConstituent(constituentId);
+                    // Only get donation history if info will be displayed on DataContext
+                    if (identifyResult.FaceId == faces[0].FaceId)
+                    {
+                        constituent.GivingHistory = await GetGivingHistory(candidateId);
+                        constituent.LastGift = await GetLastGift(candidateId);
+                    }
                     constituents.Add(identifyResult.FaceId, constituent);
                 }
             }
@@ -262,7 +269,7 @@ namespace LiveCameraSample
                 return new GivingHistory();
             }
 
-            return _constituentHandler.GetGivingHistory(givingHistoryId);
+            return await _constituentHandler.GetGivingHistory(givingHistoryId);
         }
 
         private async Task<LastGift> GetLastGift(Guid personId)
@@ -273,7 +280,7 @@ namespace LiveCameraSample
                 return new LastGift();
             }
 
-            return _constituentHandler.GetLastGift(givingHistoryId);
+            return await _constituentHandler.GetLastGift(givingHistoryId);
         }
 
         private BitmapSource VisualizeResult(VideoFrame frame)

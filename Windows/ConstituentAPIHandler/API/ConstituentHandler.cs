@@ -29,24 +29,24 @@ namespace CSHttpClientSample
             client.BaseAddress = new Uri("https://api.sky.blackbaud.com/constituent/v1/constituents/");
         }
 
-        public Constituent GetConstituent(int constituentId)
+        public async Task<Constituent> GetConstituent(int constituentId)
         {
             var uri = _client.BaseAddress + constituentId.ToString();
-            var response =  _client.GetAsync(uri).Result;
+            var response = await _client.GetAsync(uri);
             var result = response.Content;
             return _mapper.MapToConstituent(result);
         }
-        public LastGift GetLastGift(int constituentId)
+        public async Task<LastGift> GetLastGift(int constituentId)
         {
             var uri = _client.BaseAddress + $"{constituentId}/givingsummary/latest";
-            var response = _client.GetAsync(uri).Result;
+            var response = await _client.GetAsync(uri);
             var result = response.Content;
             return _mapper.MapToLastGift(result);
         }
-        public GivingHistory GetGivingHistory(int constituentId)
+        public async Task<GivingHistory> GetGivingHistory(int constituentId)
         {
             var uri = _client.BaseAddress +  $"{constituentId}/givingsummary/lifetimegiving";
-            var response = _client.GetAsync(uri).Result;
+            var response = await _client.GetAsync(uri);
             var result = response.Content;
             return _mapper.MapToGivingHistory(result);
         }

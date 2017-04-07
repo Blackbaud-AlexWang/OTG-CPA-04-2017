@@ -6,6 +6,27 @@
         xmlns:local="clr-namespace:LiveCameraSample"
         mc:Ignorable="d"
         Title="Constituent Facial Recognition" Height="600" Width="850">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Helvetica"/>
+            <Setter Property="Background" Value="#1c84c6"/>
+            <Setter Property="Padding" Value="5, 0" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Foreground" Value="White" />
+            <!--<Setter Property="FontWeight" Value="Bold" />-->
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Height" Value="26" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#1c84c6"/>
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="White" />
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -15,29 +36,29 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="#616161" BorderThickness="1 1 1 2">
             <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar">
-                <Button Content="LOGIN" Padding="5,0" Margin="5,5,0,5" Click="LoginButton_Click" Background="#1c84c6" Foreground="White" FontWeight="Bold"/>
-                <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" Background="#1c84c6"  Foreground="White" FontWeight="Bold"/>
-                <Button Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click" Background="#1c84c6"  BorderThickness="0">
+                <Button Content="Login" Margin="5,5,0,5" Click="LoginButton_Click" />
+                <Button Margin="5,5,0,5" Click="StartButton_Click">
                     <Image Source="Icons\record.png"></Image>
                 </Button>
-                <Button Padding="5,0" Margin="5,5,0,5" Click="StopButton_Click" Background="#1c84c6"  >
+                <Button Margin="5,5,0,5" Click="StopButton_Click" >
                     <Image Source="Icons\stop.png"></Image>
                 </Button>
-                <TextBlock VerticalAlignment="Center" Margin="15,5,0,5" Text="MODE:" FontWeight="Bold"/>
-                <ComboBox x:Name="ModeList" Width="100" Margin="5,5,0,5" Loaded="ModeList_Loaded" SelectionChanged="ModeList_SelectionChanged" Background="#1c84c6" Foreground="White" FontWeight="Bold"/>
+                <TextBlock Visibility="Hidden" VerticalAlignment="Center" Margin="15,5,0,5" Text="Mode:" FontWeight="Bold"/>
+                <ComboBox Visibility="Hidden" x:Name="ModeList" Width="100" Margin="5,5,0,5" Loaded="ModeList_Loaded" SelectionChanged="ModeList_SelectionChanged" />
+                <ComboBox Visibility="Hidden" x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
             </StackPanel>
         </Border>
         <Border Grid.Row="0" BorderBrush="#616161" BorderThickness="1 1 1 2">
             <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ShowHideBar" HorizontalAlignment="Right">
-                <Button Padding="5,0" Margin="5" Click="SettingsButton_Click" Background="#1c84c6">
-                    <Image Source="Icons\setting.png"></Image>
+                <Button Click="SettingsButton_Click">
+                    <Image Source="Icons\settings.png"></Image>
                 </Button>
-                <Button Content="CONSTITUENT INFO" Padding="5,0" Margin="5" Click="ConstituentInfoButton_Click" Background="#1c84c6"  Foreground="White" FontWeight="Bold" />
+                <Button Content="Show/Hide Constituent Information" Click="ConstituentInfoButton_Click" Foreground="White" />
             </StackPanel>
         </Border>
         <Border Grid.Row="1" BorderBrush="#616161" BorderThickness="1 0 1 2" Name="ConstituentInfoPanel" Background="#f0ad43">
             <StackPanel Grid.Row="1" Visibility="{Binding Path=Visibility, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Panel.ZIndex="3">
-                <TextBlock Margin="5" FontWeight="Bold" Text="CONSTITUENT INFORMATION" Foreground="White" />
+                <TextBlock Margin="5" FontWeight="Bold" Text="Constituent Information" Foreground="White" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -107,7 +128,7 @@
                     <Run Text="Vision API calls made = "/><Run Text="{Binding Source={StaticResource Settings}, Path=Default.VisionAPICallCount}"/>
                 </TextBlock>
                 <CheckBox Margin="5" IsChecked="{Binding Source={StaticResource Settings}, Path=Default.AutoStopEnabled}" ContentStringFormat="Automatically stop after {0}" Content="{Binding Source={StaticResource Settings}, Path=Default.AutoStopTime}" />
-                <Button Margin="5" Content="Save" Click="SaveSettingsButton_Click" />
+                <Button Content="SAVE" Click="SaveSettingsButton_Click" />
             </StackPanel>
         </Grid>
         <TextBlock Name="MessageArea" Margin="0, 5, 0, 0" Grid.Row="3" VerticalAlignment="Bottom" />

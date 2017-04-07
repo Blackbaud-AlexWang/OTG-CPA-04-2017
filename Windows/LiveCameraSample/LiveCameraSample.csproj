@@ -155,6 +155,7 @@
     <Content Include="Data\haarcascade_frontalface_alt2.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Icons\settings.png" />
     <Resource Include="Icons\setting.png" />
     <Resource Include="Icons\stop.png" />
     <Resource Include="Icons\record.png" />

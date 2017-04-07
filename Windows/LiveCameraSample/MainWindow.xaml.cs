@@ -235,7 +235,6 @@ namespace LiveCameraSample
 
                 // Start trying to get giving history
                 var givingHistoryTask = GetGivingHistory(candidateId);
-
                 var lastGiftTask = GetLastGift(candidateId);
 
                 //var person = await _faceClient.GetPersonAsync(_personGroup, candidateId);
